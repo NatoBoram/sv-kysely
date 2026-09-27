@@ -1,0 +1,73 @@
+{
+	"name": "@natoboram/sv-kysely",
+	"version": "0.0.0",
+	"description": "sv add-on for kysely",
+	"keywords": [
+		"sv-add",
+		"svelte",
+		"sveltekit"
+	],
+	"homepage": "https://github.com/NatoBoram/sv-kysely",
+	"bugs": {
+		"url": "https://github.com/NatoBoram/sv-kysely/issues"
+	},
+	"license": "MPL-2.0",
+	"author": {
+		"name": "Nato Boram",
+		"url": "https://github.com/NatoBoram"
+	},
+	"funding": [
+		{
+			"type": "patreon",
+			"url": "https://www.patreon.com/NatoBoram"
+		},
+		{
+			"type": "individual",
+			"url": "https://paypal.me/NatoBoram/5"
+		}
+	],
+	"files": [
+		"dist",
+		"!dist/**/*.test.*"
+	],
+	"exports": {
+		".": {
+			"default": "./dist/index.mjs"
+		}
+	},
+	"main": "dist/index.mjs",
+	"type": "module",
+	"repository": "github:NatoBoram/sv-kysely",
+	"scripts": {
+		"build": "tsdown",
+		"clean": "rm -rf coverage dist docs node_modules tsconfig.tsbuildinfo",
+		"demo-add:ci": "pnpm build && sv add file:../=who:you --cwd demo --no-git-check --no-download-check --no-install",
+		"demo-add": "pnpm build && sv add file:../ --cwd demo --no-git-check --no-install",
+		"demo-create": "sv create demo --types ts --template minimal --no-add-ons --no-install",
+		"docs": "typedoc",
+		"format": "prettier --write .",
+		"lint": "eslint . && markdownlint-cli2 \"**/*.md\" && prettier --check .",
+		"lint:fix": "eslint --fix --quiet .; markdownlint-cli2 \"**/*.md\" --fix; prettier --list-different --write .",
+		"prepublishOnly": "pnpm run build",
+		"test": "vitest run"
+	},
+	"devDependencies": {
+		"@eslint/js": "^10.0.1",
+		"@playwright/test": "^1.60.0",
+		"@sveltejs/sv-utils": "^0.3.3",
+		"@types/node": "^25.9.1",
+		"eslint": "^10.11.0",
+		"eslint-config-prettier": "^10.1.8",
+		"globals": "^17.12.0",
+		"jiti": "^2.7.0",
+		"prettier": "^3.9.9",
+		"sv": "^0.17.1",
+		"tsdown": "^0.22.1",
+		"typescript-eslint": "^8.70.1",
+		"vitest": "^4.1.8"
+	},
+	"peerDependencies": {
+		"sv": "^0.17.1"
+	},
+	"module": "dist/index.mjs"
+}
