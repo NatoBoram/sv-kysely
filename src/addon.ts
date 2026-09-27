@@ -11,6 +11,7 @@ import type { Args } from "./options.ts"
 import { options } from "./options.ts"
 import { transformPackage } from "./package.ts"
 import { generateSchema } from "./schema.ts"
+import { transformTsconfig } from "./tsconfig.ts"
 import { editViteConfig } from "./vite.ts"
 
 export const addon: Addon<Args, "@natoboram/sv-kysely"> = defineAddon({
@@ -19,15 +20,11 @@ export const addon: Addon<Args, "@natoboram/sv-kysely"> = defineAddon({
 	homepage: "https://kysely.dev",
 	options,
 
-	setup: ({ isKit, unsupported, runsAfter }) => {
-		runsAfter("prettier")
-		runsAfter("sveltekitAdapter")
-		runsAfter("experimental")
-
+	setup: ({ isKit, unsupported }) => {
 		if (!isKit) unsupported("Requires SvelteKit")
 	},
 
-	run: ({ sv, language, directory, cwd, file }) => {
+	run: ({ sv, language, directory, cwd, file, packageManager }) => {
 		const dbPath = resolve(cwd, directory.lib, "server", "db")
 		const paths = {
 			config: resolve(cwd, `kysely.config.${language}`),
@@ -51,8 +48,10 @@ export const addon: Addon<Args, "@natoboram/sv-kysely"> = defineAddon({
 		sv.file("compose.yaml", generateCompose)
 		editViteConfig({ cwd, language, sv })
 		sv.file(file.gitignore, transformGitignore())
-		sv.file(file.package, transformPackage(cwd))
+		// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+		sv.file(file.package, transformPackage({ cwd, packageManager }))
 		sv.file(paths.config, generateConfig())
+		transformTsconfig({ cwd, language, sv })
 
 		// Server files
 		sv.file(paths.db, generateDb())

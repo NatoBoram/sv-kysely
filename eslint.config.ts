@@ -89,6 +89,7 @@ export default defineConfig(
 	{
 		ignores: [
 			".pnpm-store/",
+			".test-output/",
 			"coverage/",
 			"demo/",
 			"dist/",

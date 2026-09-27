@@ -1,8 +1,12 @@
 import type { TransformFn } from "@sveltejs/sv-utils"
 import { transforms } from "@sveltejs/sv-utils"
 import { basename } from "node:path"
+import type { Run } from "./options.ts"
 
-export function transformPackage(cwd: string): TransformFn {
+export function transformPackage({
+	cwd,
+	packageManager,
+}: Pick<Run, "cwd" | "packageManager">): TransformFn {
 	return transforms.json(({ data, json }) => {
 		json.packageScriptsUpsert(
 			data,
@@ -34,7 +38,7 @@ export function transformPackage(cwd: string): TransformFn {
 		json.packageScriptsUpsert(
 			data,
 			"db:regenerate",
-			"pnpm run db:reset && pnpm run db:start && sleep 11 && pnpm run db:migrate && pnpm run db:generate && pnpm run dev",
+			`${packageManager} run db:reset && ${packageManager} run db:start && sleep 11 && ${packageManager} run db:migrate && ${packageManager} run db:generate && ${packageManager} run dev`,
 		)
 	})
 }
