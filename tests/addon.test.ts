@@ -10,7 +10,7 @@ const browser = false
 const { test, prepareServer, testCases } = setupTest(
 	{ addon },
 	{
-		kinds: [{ type: "default", options: { [addon.id]: { who: "you" } } }],
+		kinds: [{ type: "default", options: { [addon.id]: {} } }],
 		filter: testCase => testCase.variant.includes("kit"),
 		browser,
 	},
