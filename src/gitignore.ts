@@ -1,4 +1,5 @@
-import { type TransformFn, transforms } from "./sv-utils.ts"
+import type { TransformFn } from "@sveltejs/sv-utils"
+import { transforms } from "@sveltejs/sv-utils"
 
 export function transformGitignore(): TransformFn {
 	return transforms.text(({ content, text }) => {

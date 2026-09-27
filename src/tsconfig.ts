@@ -1,5 +1,5 @@
+import { fileExists, transforms } from "@sveltejs/sv-utils"
 import type { Run } from "./options.ts"
-import { fileExists, transforms } from "./sv-utils.ts"
 
 export function transformTsconfig({
 	language,
