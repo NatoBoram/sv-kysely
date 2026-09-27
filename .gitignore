@@ -10,16 +10,17 @@ demo/
 /.svelte-kit
 /build
 /dist
+/docs
 
 # OS
 .DS_Store
 Thumbs.db
 
 # Env
-.env
-.env.*
-!.env.example
-!.env.test
+!.env
+!.env.*
+.env.*.local
+.env.local
 
 # Vite
 vite.config.js.timestamp-*
