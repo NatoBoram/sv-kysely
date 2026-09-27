@@ -1,0 +1,54 @@
+name: GitHub Pages
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build_pages:
+    permissions:
+      contents: read
+
+    if: github.actor != 'nektos/act'
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: pnpm/action-setup@v6
+        with:
+          version: latest
+      - uses: actions/setup-node@v7
+        with:
+          node-version: latest
+          cache: pnpm
+      - run: pnpm install
+
+      - run: pnpm run build
+      - run: pnpm run docs
+      - run: pnpm run test:coverage
+      - run: cp --force --recursive coverage docs/coverage
+
+      - uses: actions/upload-pages-artifact@v5
+        with:
+          path: docs
+
+  deploy_pages:
+    permissions:
+      pages: write
+      id-token: write
+
+    needs: build_pages
+
+    runs-on: ubuntu-latest
+
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v5
