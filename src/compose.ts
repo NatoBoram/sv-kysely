@@ -1,0 +1,18 @@
+export function generateCompose(): string {
+	return `
+services:
+  db:
+    image: postgres:18
+    restart: always
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: mysecretpassword
+      POSTGRES_DB: local
+    volumes:
+      - pgdata:/var/lib/postgresql
+volumes:
+  pgdata:
+`.trim()
+}
