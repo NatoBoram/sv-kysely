@@ -90,6 +90,7 @@ export default defineConfig(
 		ignores: [
 			".pnpm-store/",
 			"coverage/",
+			"demo/",
 			"dist/",
 			"docs/",
 			"node_modules/",

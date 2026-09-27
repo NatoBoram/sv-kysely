@@ -1,11 +1,11 @@
 import type { OptionDefinition, SvApi, Workspace, WorkspaceOptions } from "sv"
 import { defineAddonOptions } from "sv"
 
-export interface Args extends OptionDefinition {}
+export type Args = OptionDefinition
 
 export type Run = Workspace & {
 	/** Add-on options (includes dynamically added options from setup) */
-	options: WorkspaceOptions<Args> & Record<string, unknown>
+	options: Record<string, unknown> & WorkspaceOptions<Args>
 	/** Api to interact with the workspace. */
 	sv: SvApi
 	/** Cancel the addon at any time!

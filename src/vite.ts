@@ -6,7 +6,7 @@ export function editViteConfig({
 	language,
 	sv,
 }: Pick<Run, "cwd" | "language" | "sv">): void {
-	return svelteConfig.edit({ sv, cwd }, ({ override, js }) => {
+	svelteConfig.edit({ sv, cwd }, ({ override, js }) => {
 		override({
 			typescript: {
 				config: js.common.parseExpression(
