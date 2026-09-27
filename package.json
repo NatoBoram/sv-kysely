@@ -41,7 +41,7 @@
 	"repository": "github:NatoBoram/sv-kysely",
 	"scripts": {
 		"build": "tsdown",
-		"clean": "rm -rf coverage demo dist docs node_modules tsconfig.tsbuildinfo",
+		"clean": "rm -rf .test-output coverage demo dist docs natoboram-sv-kysely-*.tgz node_modules tsconfig.tsbuildinfo",
 		"demo-add:ci": "pnpm build && sv add file:../ --cwd demo --no-git-check --no-download-check --no-install",
 		"demo-add": "pnpm build && sv add file:../ --cwd demo --no-git-check --no-install",
 		"demo-create": "sv create demo --types ts --template minimal --no-add-ons --no-install",
