@@ -2,8 +2,13 @@ import type { TransformFn } from "@sveltejs/sv-utils"
 import { transforms } from "@sveltejs/sv-utils"
 
 export function generateSchema(): TransformFn {
-	return transforms.script(({ ast, js, content, comments }) => {
-		if (content.length) return false
+	return transforms.script(({ ast, js, comments }) => {
+		const columnType = js.imports.find(ast, {
+			from: "kysely",
+			name: "ColumnType",
+		})
+		if (columnType.alias) return false
+		ast.body.length = 0
 
 		comments.add(ast, {
 			type: "Block",

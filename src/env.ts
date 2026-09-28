@@ -1,7 +1,7 @@
 import type { TransformFn } from "@sveltejs/sv-utils"
 import { transforms } from "@sveltejs/sv-utils"
 
-export function generateEnv(): TransformFn {
+export function upsertEnv(): TransformFn {
 	return transforms.text(({ content, text }) => {
 		const key = "DATABASE_URL"
 		const comment = "Kysely"

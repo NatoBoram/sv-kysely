@@ -3,6 +3,10 @@ import { transforms } from "@sveltejs/sv-utils"
 
 export function generateDb(): TransformFn {
 	return transforms.script(({ ast, js }) => {
+		const kysely = js.imports.find(ast, { from: "kysely", name: "Kysely" })
+		if (kysely.alias) return false
+		ast.body.length = 0
+
 		js.imports.addNamed(ast, {
 			from: "$env/dynamic/private",
 			imports: { env: "env" },
@@ -55,5 +59,7 @@ export function generateDb(): TransformFn {
 			name: "db",
 			fallback: db,
 		})
+
+		return
 	})
 }

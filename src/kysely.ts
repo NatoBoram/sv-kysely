@@ -3,6 +3,13 @@ import { dedent, transforms } from "@sveltejs/sv-utils"
 
 export function generateConfig(): TransformFn {
 	return transforms.script(({ ast, js }) => {
+		const defineConfig = js.imports.find(ast, {
+			from: "kysely-ctl",
+			name: "defineConfig",
+		})
+		if (defineConfig.alias) return false
+		ast.body.length = 0
+
 		js.imports.addNamed(ast, {
 			from: "@natoboram/load_env",
 			imports: { loadEnv: "loadEnv" },
@@ -61,5 +68,7 @@ defineConfig({
 		js.exports.createDefault(ast, {
 			fallback: js.common.parseExpression("config"),
 		})
+
+		return
 	})
 }
