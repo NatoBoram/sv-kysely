@@ -56,7 +56,7 @@
 		"@eslint/js": "^10.0.1",
 		"@playwright/test": "^1.60.0",
 		"@sveltejs/sv-utils": "^0.3.3",
-		"@types/node": "^25.9.1",
+		"@types/node": "^26.6.2",
 		"eslint": "^10.11.0",
 		"eslint-config-prettier": "^10.1.8",
 		"globals": "^17.12.0",
