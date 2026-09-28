@@ -1,0 +1,69 @@
+version: 2
+updates:
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: monthly
+      timezone: America/Toronto
+    commit-message:
+      prefix: "⬆️ "
+    groups:
+      security:
+        applies-to: security-updates
+        patterns:
+          - "*"
+      patch-development:
+        update-types:
+          - patch
+        dependency-type: development
+      patch-production:
+        update-types:
+          - patch
+        dependency-type: production
+      minor-development:
+        update-types:
+          - minor
+        dependency-type: development
+      minor-production:
+        update-types:
+          - minor
+        dependency-type: production
+      eslint:
+        patterns:
+          - "*eslint*"
+          - globals
+          - jiti
+      prettier:
+        patterns:
+          - "*prettier*"
+      svelte:
+        patterns:
+          - "*svelte*"
+          - "sv"
+      vite:
+        patterns:
+          - "*vitejs*"
+          - vite
+          - vitest
+      typescript:
+        patterns:
+          - "*typescript*"
+
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: monthly
+      timezone: America/Toronto
+    commit-message:
+      prefix: "⬆️ "
+    groups:
+      security:
+        applies-to: security-updates
+        patterns:
+          - "*"
+      actions:
+        patterns:
+          - actions/*
+      docker:
+        patterns:
+          - docker/*
