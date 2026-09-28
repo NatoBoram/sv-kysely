@@ -2,8 +2,10 @@ import type { TransformFn } from "@sveltejs/sv-utils"
 import { transforms } from "@sveltejs/sv-utils"
 
 export function generateMigration(): TransformFn {
-	return transforms.script(({ ast, js, content }) => {
-		if (content.length) return false
+	return transforms.script(({ ast, js }) => {
+		const kysely = js.imports.find(ast, { from: "kysely", name: "Kysely" })
+		if (kysely.alias) return false
+		ast.body.length = 0
 
 		js.imports.addNamed(ast, {
 			from: "kysely",

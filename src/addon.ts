@@ -1,9 +1,13 @@
+import type { AgentName } from "@sveltejs/sv-utils"
+import { color, resolveCommandArray } from "@sveltejs/sv-utils"
+import { readdir } from "node:fs/promises"
 import { resolve } from "node:path"
 import type { Addon } from "sv"
 import { defineAddon } from "sv"
+import { transformAuth } from "./auth.ts"
 import { generateCompose } from "./compose.ts"
 import { generateDb } from "./db.ts"
-import { generateEnv } from "./env.ts"
+import { upsertEnv } from "./env.ts"
 import { transformGitignore } from "./gitignore.ts"
 import { generateConfig } from "./kysely.ts"
 import { generateMigration } from "./migration.ts"
@@ -20,11 +24,13 @@ export const addon: Addon<Args, "@natoboram/sv-kysely"> = defineAddon({
 	homepage: "https://kysely.dev",
 	options,
 
-	setup: ({ isKit, unsupported }) => {
+	setup: ({ isKit, unsupported, runsAfter }) => {
+		runsAfter("betterAuth")
+		runsAfter("drizzle")
 		if (!isKit) unsupported("Requires SvelteKit")
 	},
 
-	run: ({ sv, language, directory, cwd, file, packageManager }) => {
+	run: async ({ sv, language, directory, cwd, file, packageManager }) => {
 		const dbPath = resolve(cwd, directory.lib, "server", "db")
 		const paths = {
 			config: resolve(cwd, `kysely.config.${language}`),
@@ -32,6 +38,8 @@ export const addon: Addon<Args, "@natoboram/sv-kysely"> = defineAddon({
 			migrations: resolve(dbPath, "migrations"),
 			schema: resolve(dbPath, `schema.${language}`),
 			seeds: resolve(dbPath, "seeds"),
+			auth: resolve(cwd, directory.lib, "server", `auth.${language}`),
+			workspace: resolve(cwd, "pnpm-workspace.yaml"),
 		}
 
 		// Dependencies
@@ -43,22 +51,47 @@ export const addon: Addon<Args, "@natoboram/sv-kysely"> = defineAddon({
 		sv.devDependency("pg", "^8.23.0")
 
 		// Root files
-		sv.file(".env.local", generateEnv())
-		sv.file(".env", generateEnv())
-		sv.file("compose.yaml", generateCompose)
 		editViteConfig({ cwd, language, sv })
+		sv.file(".env.local", upsertEnv())
+		sv.file(".env", upsertEnv())
+		sv.file("compose.yaml", generateCompose)
 		sv.file(file.gitignore, transformGitignore())
 		// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-		sv.file(file.package, transformPackage({ cwd, packageManager }))
+		sv.file(file.package, transformPackage({ cwd, packageManager }, dbPath))
+		sv.file(paths.auth, transformAuth())
 		sv.file(paths.config, generateConfig())
 		transformTsconfig({ cwd, language, sv })
 
 		// Server files
 		sv.file(paths.db, generateDb())
 		sv.file(paths.schema, generateSchema())
-		sv.file(
-			resolve(paths.migrations, `${Date.now()}_init.ts`),
-			generateMigration(),
+
+		// Migrations
+		const migrations = await readdir(paths.migrations).catch(
+			() => new Array<string>(),
 		)
+		if (!migrations.some(file => file.endsWith(`_init.${language}`)))
+			sv.file(
+				resolve(paths.migrations, `${Date.now()}_init.${language}`),
+				generateMigration(),
+			)
+	},
+
+	nextSteps: ({ packageManager }) => {
+		const pm = pmer(packageManager)
+		const steps: string[] = []
+
+		steps.push(`Run ${pm("run", ["db:start"])} to start the docker container`)
+		steps.push(`Run ${pm("run", ["db:regenerate"])} to reset the database`)
+		steps.push(
+			`Check ${color.env("DATABASE_URL")} in ${color.path(".env.local")} and adjust it to your needs`,
+		)
+
+		return steps
 	},
 })
+
+function pmer(packageManager: AgentName) {
+	return (command: Parameters<typeof resolveCommandArray>[1], args: string[]) =>
+		color.command(resolveCommandArray(packageManager, command, args))
+}

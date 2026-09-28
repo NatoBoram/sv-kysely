@@ -2,27 +2,8 @@ import fs from "node:fs"
 import path, { resolve } from "node:path"
 import { expect } from "vitest"
 import addon from "../src/index.js"
+import { isPackageJson } from "../src/package.js"
 import { setupTest } from "./setup/suite.js"
-
-interface PackageJson {
-	readonly scripts: Record<string, string>
-	readonly devDependencies: Record<string, string>
-}
-
-function isStringRecord(value: unknown): value is Record<string, string> {
-	if (typeof value !== "object" || value === null) return false
-	return Object.values(value).every(entry => typeof entry === "string")
-}
-
-function isPackageJson(value: unknown): value is PackageJson {
-	if (typeof value !== "object" || value === null) return false
-	return (
-		"scripts" in value &&
-		"devDependencies" in value &&
-		isStringRecord(value.scripts) &&
-		isStringRecord(value.devDependencies)
-	)
-}
 
 const { test, testCases } = setupTest(
 	{ addon },
@@ -37,24 +18,21 @@ test.concurrent.for(testCases)(
 	"@natoboram/sv-kysely $kind.type $variant",
 	(testCase, ctx) => {
 		const cwd = ctx.cwd(testCase)
-		const extension = testCase.variant.includes("ts") ? "ts" : "js"
+		const language = testCase.variant.includes("ts") ? "ts" : "js"
 
-		const dbPath = path.resolve(cwd, `src/lib/server/db/db.${extension}`)
+		const dbPath = path.resolve(cwd, `src/lib/server/db/db.${language}`)
 		const db = fs.readFileSync(dbPath, "utf8")
 		expect(db).toContain("$env/dynamic/private")
 		expect(db).toContain("new Kysely<DB>")
 
-		const schemaPath = path.resolve(
-			cwd,
-			`src/lib/server/db/schema.${extension}`,
-		)
+		const schemaPath = path.resolve(cwd, `src/lib/server/db/schema.${language}`)
 		const schema = fs.readFileSync(schemaPath, "utf8")
 		expect(schema).toContain("export interface DB")
 
 		const migrationsPath = path.resolve(cwd, "src/lib/server/db/migrations")
 		const migrationFile = fs
 			.readdirSync(migrationsPath)
-			.find(file => file.endsWith("_init.ts"))
+			.find(file => file.endsWith(`_init.${language}`))
 		expect(migrationFile).toBeDefined()
 		if (!migrationFile) throw new Error("Initial migration was not generated")
 
@@ -67,7 +45,7 @@ test.concurrent.for(testCases)(
 			"export async function down(db: Kysely<unknown>)",
 		)
 
-		const configPath = path.resolve(cwd, `kysely.config.${extension}`)
+		const configPath = path.resolve(cwd, `kysely.config.${language}`)
 		const config = fs.readFileSync(configPath, "utf8")
 		expect(config).toContain("await loadEnv({ override: true })")
 		expect(config).toContain("src/lib/server/db/migrations")
@@ -101,8 +79,8 @@ test.concurrent.for(testCases)(
 		const compose = fs.readFileSync(composePath, "utf8")
 		expect(compose).toContain("image: postgres")
 
-		const vitePath = resolve(cwd, `vite.config.${extension}`)
+		const vitePath = resolve(cwd, `vite.config.${language}`)
 		const viteConfig = fs.readFileSync(vitePath, "utf8")
-		expect(viteConfig).toContain(`../kysely.config.${extension}`)
+		expect(viteConfig).toContain(`../kysely.config.${language}`)
 	},
 )
