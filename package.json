@@ -44,7 +44,7 @@
 		"clean": "rm -rf .test-output coverage demo dist docs natoboram-sv-kysely-*.tgz node_modules tsconfig.tsbuildinfo",
 		"demo-add:ci": "pnpm build && sv add file:../ --cwd demo --no-git-check --no-download-check --no-install",
 		"demo-add": "pnpm build && sv add file:../ --cwd demo --no-git-check --no-install",
-		"demo-create": "sv create demo --types ts --template minimal --add better-auth --no-install",
+		"demo-create": "sv create demo --types ts --template minimal --add better-auth='demo:password' drizzle='database:postgresql+client:postgres.js+docker:yes' --no-install",
 		"docs": "typedoc",
 		"format": "prettier --write .",
 		"lint": "eslint . && markdownlint-cli2 \"**/*.md\" && prettier --check .",
