@@ -15,8 +15,8 @@ importers:
         specifier: ^1.60.0
         version: 1.63.0
       '@sveltejs/sv-utils':
-        specifier: ^0.3.3
-        version: 0.3.3
+        specifier: ^1.0.2
+        version: 1.0.2
       '@types/node':
         specifier: ^26.6.2
         version: 26.6.3
@@ -286,6 +286,9 @@ packages:
 
   '@sveltejs/sv-utils@0.3.3':
     resolution: {integrity: sha512-K6Voe+/4Ry6o3QTFdG4cNkdgW9kvbkJuRyyIyUbSVkuJUVz4jCdvYNuDCBNYC1mpxBFi7nuulpOeuqRjldZXRA==}
+
+  '@sveltejs/sv-utils@1.0.2':
+    resolution: {integrity: sha512-iFK45T+Je0wswAtJ1sH2OtdpcsPDYlbwwO9joGKcEHsziZAKWaR9HjVMBkZkmjc+cu/uCJIemoV1tg4e25vHUQ==}
 
   '@types/chai@5.2.3':
     resolution: {integrity: sha512-Mw558oeA9fFbv65/y4mHtXDs9bPnFMZAL/jxdPFUpOHHIXX91mcgEHbS5Lahr+pwZFR8A7GQleRWeI6cGFC2UA==}
@@ -1649,6 +1652,8 @@ snapshots:
   '@sindresorhus/merge-streams@4.0.0': {}
 
   '@sveltejs/sv-utils@0.3.3': {}
+
+  '@sveltejs/sv-utils@1.0.2': {}
 
   '@types/chai@5.2.3':
     dependencies:
