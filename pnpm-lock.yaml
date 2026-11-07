@@ -39,8 +39,8 @@ importers:
         specifier: ^3.9.9
         version: 3.9.9
       sv:
-        specifier: ^0.17.1
-        version: 0.17.1
+        specifier: ^1.2.0
+        version: 1.2.0
       tsdown:
         specifier: ^0.23.0
         version: 0.23.0(typescript@6.0.3)
@@ -383,11 +383,11 @@ packages:
     resolution: {integrity: sha512-tlqY9xq5ukxTUZBmoOp+m61cqwQD5pHJtFY3Mn8CA8ps6yghLH/Hw8UPdqg4OLmFW3IFlcXnQNmo/dh8HzXYIQ==}
     engines: {node: '>=18'}
 
-  '@sveltejs/sv-utils@0.3.3':
-    resolution: {integrity: sha512-K6Voe+/4Ry6o3QTFdG4cNkdgW9kvbkJuRyyIyUbSVkuJUVz4jCdvYNuDCBNYC1mpxBFi7nuulpOeuqRjldZXRA==}
-
   '@sveltejs/sv-utils@1.0.2':
     resolution: {integrity: sha512-iFK45T+Je0wswAtJ1sH2OtdpcsPDYlbwwO9joGKcEHsziZAKWaR9HjVMBkZkmjc+cu/uCJIemoV1tg4e25vHUQ==}
+
+  '@sveltejs/sv-utils@1.1.0':
+    resolution: {integrity: sha512-HidTbnTfmgsxCyyv8HfyQzy5CiOxHF32xu4pmmi0tCC9x/W2jMpfOyH101qB7rR21DhVt4OFFVn+K4+zg+kbjA==}
 
   '@types/chai@5.2.3':
     resolution: {integrity: sha512-Mw558oeA9fFbv65/y4mHtXDs9bPnFMZAL/jxdPFUpOHHIXX91mcgEHbS5Lahr+pwZFR8A7GQleRWeI6cGFC2UA==}
@@ -1349,8 +1349,8 @@ packages:
     resolution: {integrity: sha512-yDPMNjp4WyfYBkHnjIRLfca1i6KMyGCtsVgoKe/z1+6vukgaENdgGBZt+ZmKPc4gavvEZ5OgHfHdrazhgNyG7w==}
     engines: {node: '>=12'}
 
-  sv@0.17.1:
-    resolution: {integrity: sha512-h8kB4mIpxiZKPd8CxxpMjBjGXGYlI5KKAwIFccXxWYJEUO9dVomvVSZGnbWQV1+dN+KJ2kzvsVjpJ+aTrYQ0xg==}
+  sv@1.2.0:
+    resolution: {integrity: sha512-Anrzq0xeJwO6Q+0AWRVtwoyalMir5PvS7wg9PL+FjAHA/ICqsGpH2ikSDdjFOnnMAHpWJmRXzUrgyZBfO2NZFg==}
     hasBin: true
 
   tinybench@6.1.4:
@@ -1802,9 +1802,9 @@ snapshots:
 
   '@sindresorhus/merge-streams@4.0.0': {}
 
-  '@sveltejs/sv-utils@0.3.3': {}
-
   '@sveltejs/sv-utils@1.0.2': {}
+
+  '@sveltejs/sv-utils@1.1.0': {}
 
   '@types/chai@5.2.3':
     dependencies:
@@ -2786,9 +2786,9 @@ snapshots:
     dependencies:
       ansi-regex: 6.3.0
 
-  sv@0.17.1:
+  sv@1.2.0:
     dependencies:
-      '@sveltejs/sv-utils': 0.3.3
+      '@sveltejs/sv-utils': 1.1.0
 
   tinybench@6.1.4: {}
 
